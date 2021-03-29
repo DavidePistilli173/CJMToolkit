@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CJMToolkit>
+   <MainWindow>
+      <Size>
+         <Minimum>
+            <Width>1280</Width>
+            <Height>720</Height>
+         </Minimum>
+      </Size>
+      <StyleSheet>
+         <file>./config/stylesheets/base.qss</file>
+         <!-- <file>./config/stylesheets/state_button.qss</file> -->
+      </StyleSheet>
+   </MainWindow>
+</CJMToolkit>
