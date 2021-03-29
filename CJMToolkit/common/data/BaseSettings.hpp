@@ -1,3 +1,27 @@
+/*
+   MIT License
+
+   Copyright (c) [2021] [Davide Dravindran Pistilli] [https://github.com/DavidePistilli173/CJMToolkit]
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the
+   Software is furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
+
 #ifndef BASESETTINGS_H
 #define BASESETTINGS_H
 
@@ -18,8 +42,7 @@ namespace cjm::data
    class BaseSettings
    {
    public:
-      /********** DATA ************************************************************************************************/
-
+      /********** DATA *********/
       /**
        * @brief Node of the settings tree.
        */
@@ -38,8 +61,7 @@ namespace cjm::data
       static constexpr std::string_view default_value{ "" }; /**< Default value for attribtues and nodes. */
       static constexpr long             last_node_idx{ -1 }; /**< Code used to identfy the last node of a vector. */
 
-      /********** CONSTRUCTORS ****************************************************************************************/
-
+      /********** CONSTRUCTORS *********/
       /**
        * @brief Construct an empty settings object.
        */
@@ -66,8 +88,7 @@ namespace cjm::data
        */
       virtual ~BaseSettings() = default;
 
-      /********** OPERATORS *******************************************************************************************/
-
+      /********** OPERATORS *********/
       /**
        * @brief Access the value of a node with a specific key.
        * @param nodeName Key of the desired node.
@@ -77,8 +98,7 @@ namespace cjm::data
        */
       std::string_view operator()(std::string_view nodeName, long index = 0) const;
 
-      /********** METHODS *********************************************************************************************/
-
+      /********** METHODS *********/
       /**
        * @brief Add a child node to the current node.
        * @param nodeName Name of the new node.
@@ -149,8 +169,7 @@ namespace cjm::data
       std::string_view value() const;
 
    protected:
-      /********** METHODS *********************************************************************************************/
-
+      /********** METHODS *********/
       /**
        * @brief Internal function that modifies the current node when entering a child.
        * @param nodeName Name of the node.
@@ -168,14 +187,14 @@ namespace cjm::data
        */
       void internalReturnToRoot_();
 
-      /********** VARIABLES *******************************************************************************************/
-
+      /********** VARIABLES *********/
       cjm::io::Log* logger_{ nullptr }; /**< Message logger. */
 
       std::unique_ptr<Node> root_;                   /**< Actual root of the tree. */
       Node*                 currentNode_{ nullptr }; /**< Currently selected node. */
 
    private:
+      /********** METHODS *********/
       /**
        * @brief Recursive part of a post-order visit.
        * @tparam Callable Function that will be applied to each node. Should accept a Node* as parameter.
