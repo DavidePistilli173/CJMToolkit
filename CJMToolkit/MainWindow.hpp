@@ -26,12 +26,16 @@
 #define MAINWINDOW_HPP
 
 #include "common/data/BaseSettings.hpp"
+#include "common/data/Version.hpp"
 #include "common/io/Log.hpp"
 #include "common/qt/ButtonSelector.hpp"
 #include "common/qt/StateButton.hpp"
+#include "panels/DebugPanel.hpp"
+#include "version_info.hpp"
 
 #include <QLayout>
 #include <QMainWindow>
+#include <QStackedLayout>
 #include <array>
 #include <string_view>
 
@@ -43,8 +47,7 @@ class MainWindow : public QMainWindow
    Q_OBJECT
 
 public:
-   /********** DATA ***************************************************************************************************/
-
+   /********** DATA **********/
    static constexpr std::string_view application_name{ "CJMTooklit" }; /**< Name of the application. */
 
    /**
@@ -72,8 +75,7 @@ public:
     */
    struct PageSelectorPanel
    {
-      /********** DATA ************************************************************************************************/
-
+      /********** DATA **********/
       using ButtonData = cjm::qt::StateButton::Data;
 
       /**
@@ -90,8 +92,22 @@ public:
       static constexpr std::array<ButtonData, static_cast<int>(Order::debug) + 1> buttons{ ButtonData{
          .label = "DEBUG", .value = static_cast<long>(Order::debug) } };
 
-      /********** UI OBJECTS ******************************************************************************************/
+      /********** UI OBJECTS *********/
       cjm::qt::ButtonSelector* pageSelector_{ nullptr }; /**< Selector for choosing the page of the application. */
+   };
+
+   /**
+    * @brief Panel containing the pages of the application.
+    */
+   struct PagePanel
+   {
+      /********** CONSTANTS **********/
+      static constexpr int margin{ 5 };  /**< Content margin. */
+      static constexpr int spacing{ 5 }; /**< Spacing. */
+
+      /********** UI OBJECTS **********/
+      QStackedLayout* layout;               /**< Layout of the panel. */
+      DebugPanel*     debugPage{ nullptr }; /**< Debug page. */
    };
 
    /**
@@ -99,8 +115,7 @@ public:
     */
    struct MainPanel
    {
-      /********** DATA ************************************************************************************************/
-
+      /********** DATA **********/
       /**
        * @brief Order of the elements of the panel.
        */
@@ -110,18 +125,22 @@ public:
          page
       };
 
+      /**
+       * @brief Stretches of the elements of the panel.
+       */
+      static constexpr std::array<int, static_cast<size_t>(Order::page) + 1> stretches{ 1, 10 };
+
       static constexpr int margin{ 5 };  /**< Content margin. */
       static constexpr int spacing{ 5 }; /**< Spacing between elements. */
 
-      /********** UI OBJECTS ******************************************************************************************/
-
+      /********** UI OBJECTS **********/
       QWidget*          mainWidget{ nullptr }; /**< Central widget of the application. */
       QVBoxLayout*      mainLayout{ nullptr }; /**< Main layout of the panel. */
       PageSelectorPanel pageSelectorPanel;     /**< Panel that contains the page selector. */
+      PagePanel         pagePanel;             /**< Panel containing all application pages. */
    };
 
-   /********** CONSTRUCTORS *******************************************************************************************/
-
+   /********** CONSTRUCTORS **********/
    /**
     * @brief Create the main window.
     * @param settings Settings to use in the application.
@@ -134,30 +153,58 @@ public:
     */
    ~MainWindow();
 
+   /**
+    * @brief Initialise the main window.
+    * @return true on success, false otherwise.
+    */
+   bool init();
+
 private:
-   /********** METHODS ************************************************************************************************/
+   /********** METHODS **********/
+   /**
+    * @brief Initialise the pages of the application.
+    * @param panel Panel to initialise.
+    * @return true on success, false otherwise.
+    */
+   bool initPages_(PagePanel& panel);
 
    /**
     * @brief Initialise the page selector.
+    * @return true on success, false otherwise.
     */
-   void initPageSelector_(PageSelectorPanel& pageSelectorPanel);
+   bool initPageSelector_(PageSelectorPanel& pageSelectorPanel);
 
    /**
     * @brief Initialise the UI of the window.
+    * @return true on success, false otherwise.
     */
-   void initUI_();
+   bool initUI_();
+
+   /**
+    * @brief Initialise the window.
+    * @return true on success, false otherwise.
+    */
+   bool initWindow_();
+
+   /**
+    * @brief Load settings from file.
+    * @return true on success, false otherwise.
+    */
+   bool loadSettings_();
 
    /**
     * @brief Load sizes of the main window.
+    * @return true on success, false otherwise.
     */
-   void loadSizes_();
+   bool loadSizes_();
 
    /**
     * @brief Load the stylesheets to apply to all children of the main window.
+    * @return true on success, false otherwise.
     */
-   void loadStyleSheets_();
+   bool loadStyleSheets_();
 
-   /********** VARIABLES **********************************************************************************************/
+   /********** VARIABLES **********/
    cjm::io::Log*            logger_{ nullptr }; /**< Message logger. */
    cjm::data::BaseSettings& settings_;          /**< Application settings. */
    MainPanel                mainPanel_;         /**< Main panel of the window. */

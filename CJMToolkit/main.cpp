@@ -73,6 +73,12 @@ int main(int argc, char* argv[])
    }
 
    MainWindow w{ mainWindowSettings };
+   if (!w.init())
+   {
+      logger->fatal("Failed to initialise the main window.");
+      return -1;
+   }
+
    w.show();
 
    return a.exec();

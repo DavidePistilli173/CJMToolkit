@@ -10,20 +10,27 @@ CONFIG += c++17
 
 SOURCES += \
     common/data/BaseSettings.cpp \
+    common/data/Version.cpp \
     common/io/Log.cpp \
     common/qt/ButtonSelector.cpp \
     common/qt/Settings.cpp \
     common/qt/StateButton.cpp \
     main.cpp \
-    MainWindow.cpp
+    MainWindow.cpp \
+    panels/DebugPanel.cpp
 
 HEADERS += \
     MainWindow.hpp \
     common/data/BaseSettings.hpp \
+    common/data/CircularQueue.hpp \
+    common/data/Version.hpp \
     common/io/Log.hpp \
     common/qt/ButtonSelector.hpp \
     common/qt/Settings.hpp \
-    common/qt/StateButton.hpp
+    common/qt/StateButton.hpp \
+    common/version_info.hpp \
+    panels/DebugPanel.hpp \
+    version_info.hpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

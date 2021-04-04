@@ -29,49 +29,164 @@
 MainWindow::MainWindow(cjm::data::BaseSettings& settings, QWidget* parent) :
    QMainWindow{ parent }, settings_{ settings }
 {
-   logger_ = cjm::io::Log::logger();
-
-   if (!settings_.valid())
-   {
-      logger_->error("Invalid settings.");
-   }
-   else
-   {
-      loadSizes_();
-      loadStyleSheets_();
-      initUI_();
-   }
 }
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::initPageSelector_(PageSelectorPanel& pageSelectorPanel)
+bool MainWindow::init()
+{
+   // Initialise the logger.
+   logger_ = cjm::io::Log::logger();
+   if (logger_ == nullptr) return false;
+
+   if (!settings_.valid())
+   {
+      logger_->error("Invalid settings.");
+      return false;
+   }
+
+   if (!loadSettings_())
+   {
+      logger_->error("Failed to load settings");
+      return false;
+   }
+
+   if (!initUI_())
+   {
+      logger_->error("Failed to initialise the UI.");
+      return false;
+   }
+
+   return true;
+}
+
+bool MainWindow::initPages_(PagePanel& panel)
+{
+   using Panel = PagePanel;
+
+   panel.debugPage = new DebugPanel();
+   if (panel.debugPage == nullptr)
+   {
+      logger_->error("Memory allocation failed.");
+      return false;
+   }
+
+   if (!panel.debugPage->init())
+   {
+      logger_->error("Failed to initialise the DEBUG page.");
+      return false;
+   }
+
+   panel.layout = new QStackedLayout();
+   if (panel.layout == nullptr)
+   {
+      logger_->error("Memory allocation failed.");
+      return false;
+   }
+
+   panel.layout->setContentsMargins(Panel::margin, Panel::margin, Panel::margin, Panel::margin);
+   panel.layout->setSpacing(Panel::spacing);
+
+   panel.layout->insertWidget(static_cast<int>(PageSelectorPanel::Order::debug), panel.debugPage);
+   panel.layout->setCurrentIndex(static_cast<int>(PageSelectorPanel::Order::debug));
+
+   return true;
+}
+
+bool MainWindow::initPageSelector_(PageSelectorPanel& pageSelectorPanel)
 {
    using Panel = PageSelectorPanel;
 
    pageSelectorPanel.pageSelector_ = new cjm::qt::ButtonSelector(Panel::buttons);
+   if (pageSelectorPanel.pageSelector_ == nullptr)
+   {
+      logger_->error("Memory allocation failed.");
+      return false;
+   }
+
+   return true;
 }
 
-void MainWindow::initUI_()
+bool MainWindow::initUI_()
 {
    using Panel = MainPanel;
 
-   initPageSelector_(mainPanel_.pageSelectorPanel);
+   if (!initWindow_())
+   {
+      logger_->error("Failed to initialise the main application window.");
+      return false;
+   }
+
+   if (!initPageSelector_(mainPanel_.pageSelectorPanel))
+   {
+      logger_->error("Failed to initialise the page selector.");
+      return false;
+   }
+
+   if (!initPages_(mainPanel_.pagePanel))
+   {
+      logger_->error("Failed to initialise the application pages.");
+      return false;
+   }
 
    mainPanel_.mainLayout = new QVBoxLayout();
+   if (mainPanel_.mainLayout == nullptr)
+   {
+      logger_->error("Memory allocation failed.");
+      return false;
+   }
    mainPanel_.mainLayout->setContentsMargins(Panel::margin, Panel::margin, Panel::margin, Panel::margin);
    mainPanel_.mainLayout->setSpacing(Panel::spacing);
 
    mainPanel_.mainLayout->insertWidget(
-      static_cast<int>(Panel::Order::page_selector), mainPanel_.pageSelectorPanel.pageSelector_);
+      static_cast<int>(Panel::Order::page_selector),
+      mainPanel_.pageSelectorPanel.pageSelector_,
+      Panel::stretches[static_cast<int>(Panel::Order::page_selector)]);
+   mainPanel_.mainLayout->insertLayout(
+      static_cast<int>(Panel::Order::page),
+      mainPanel_.pagePanel.layout,
+      Panel::stretches[static_cast<int>(Panel::Order::page)]);
 
    mainPanel_.mainWidget = new QWidget();
+   if (mainPanel_.mainWidget == nullptr)
+   {
+      logger_->error("Memory allocation failed.");
+      return false;
+   }
+
    mainPanel_.mainWidget->setContentsMargins(0, 0, 0, 0);
    setCentralWidget(mainPanel_.mainWidget);
    mainPanel_.mainWidget->setLayout(mainPanel_.mainLayout);
+
+   return true;
 }
 
-void MainWindow::loadSizes_()
+bool MainWindow::initWindow_()
+{
+   // Set the title bar.
+   setWindowTitle(QString(application_name.data()) + " " + version.getString().data());
+
+   return true;
+}
+
+bool MainWindow::loadSettings_()
+{
+   if (!loadSizes_())
+   {
+      logger_->error("Failed to load window sizes.");
+      return false;
+   }
+
+   if (!loadStyleSheets_())
+   {
+      logger_->error("Failed to load stylesheets.");
+      return false;
+   }
+
+   return true;
+}
+
+bool MainWindow::loadSizes_()
 {
    using cjm::data::BaseSettings;
 
@@ -115,9 +230,11 @@ void MainWindow::loadSizes_()
    {
       logger_->warn("No size section specified.", Size::node);
    }
+
+   return true;
 }
 
-void MainWindow::loadStyleSheets_()
+bool MainWindow::loadStyleSheets_()
 {
    using cjm::data::BaseSettings;
 
@@ -146,4 +263,6 @@ void MainWindow::loadStyleSheets_()
    {
       logger_->warn("No style-sheet section specified.", StyleSheet::name);
    }
+
+   return true;
 }
