@@ -57,19 +57,25 @@ int main(int argc, char* argv[])
       logger->fatal("Failed to initialise the settings file.");
       return -1;
    }
-   logger->info("Settings file loaded successfully.", settings_file);
+   logger->info("Settings file loaded successfully.", Log::pack("settings file", settings_file));
 
    BaseSettings settingsRoot{ settings.enterNode(settings_root) };
    if (!settingsRoot.valid())
    {
-      logger->error("No root settings node.", settings_root);
+      logger->error(
+         "No root settings node.",
+         Log::pack("settings file", settings_file),
+         Log::pack("required root", settings_root));
       return -1;
    }
 
    BaseSettings mainWindowSettings{ settingsRoot.enterNode(settings_main_window) };
    if (!mainWindowSettings.valid())
    {
-      logger->warn("No settings for the main window.", settings_file, settings_main_window);
+      logger->warn(
+         "No settings for the main window.",
+         Log::pack("settings file", settings_file),
+         Log::pack("missing node", settings_main_window));
    }
 
    MainWindow w{ mainWindowSettings };

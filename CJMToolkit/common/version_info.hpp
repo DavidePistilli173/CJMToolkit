@@ -6,8 +6,8 @@
 namespace cjm
 {
    constexpr unsigned int version_majour{ 1U }; /**< Majour version of the CJM common functionality. */
-   constexpr unsigned int version_minor{ 0U };  /**< Minor version of the CJM common functionality. */
-   constexpr unsigned int version_build{ 0U };  /**< Build version of the CJM common functionality. */
+   constexpr unsigned int version_minor{ 1U };  /**< Minor version of the CJM common functionality. */
+   constexpr unsigned int version_build{ 1U };  /**< Build version of the CJM common functionality. */
 
    /**
     * @brief Version of the CJM common functionality.

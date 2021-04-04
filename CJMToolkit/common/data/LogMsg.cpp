@@ -22,58 +22,40 @@
    SOFTWARE.
 */
 
-#include "Log.hpp"
+#include "LogMsg.hpp"
 
-namespace cjm::io
+namespace cjm::data
 {
-   using cjm::data::LogMsg;
-
-   /********** STATIC VARIABLES DEFINITIONS **********/
-   bool                 Log::initialised_{ false };
-   std::unique_ptr<Log> Log::logger_;
-
-   /********** METHOD DEFINITIONS **********/
-   bool Log::init(std::string_view logFile)
+   LogMsg::LogMsg(Level level, long long timestamp, std::string_view message) :
+      level_{ level }, timestamp_{ timestamp }, msg_{ message }
    {
-      if (!initialised_)
-      {
-         // Initialise the logger's instance.
-         logger_ = std::unique_ptr<Log>(new Log());
-         if (logger_ == nullptr)
-         {
-            return false;
-         }
-
-         // Stop sync with stdio.
-         std::ios_base::sync_with_stdio(false);
-
-         // Initialise the logger.
-         logger_->outputFile_ = std::ofstream(logFile.data());
-         if (logger_->outputFile_.fail())
-         {
-            return false;
-         }
-         logger_->startTime_ = std::chrono::steady_clock::now();
-
-         initialised_ = true;
-      }
-
-      return true;
    }
 
-   LogMsg::Level Log::level() const
+   std::ostream& operator<<(std::ostream& stream, const LogMsg::Level& level)
    {
-      return logLevel_;
+      stream << LogMsg::level_keys[static_cast<int>(level)];
+      return stream;
    }
 
-   Log* Log::logger()
+   std::stringstream& operator<<(std::stringstream& stream, const LogMsg::Level& level)
    {
-      return logger_.get();
+      stream << LogMsg::level_keys[static_cast<int>(level)];
+      return stream;
    }
 
-   void Log::setLevel(LogMsg::Level level)
+   void LogMsg::addData(const Datagram& data)
    {
-      logLevel_ = level;
-      trace("Log level set.", pack("log level", logLevel_.load()));
+      data_.emplace_back(data);
    }
-} // namespace cjm::io
+
+   void LogMsg::addData(const std::string& description, const std::string& data)
+   {
+      data_.emplace_back(description, data);
+   }
+
+   std::string LogMsg::baseMessage() const
+   {
+      return std::string(header_begin) + level_keys[static_cast<int>(level_)].data() + separator.data() +
+             std::to_string(timestamp_) + time_unit.data() + header_end.data() + separator.data() + msg_;
+   }
+} // namespace cjm::data

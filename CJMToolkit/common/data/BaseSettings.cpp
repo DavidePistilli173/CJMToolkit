@@ -26,6 +26,8 @@
 
 namespace cjm::data
 {
+   using cjm::io::Log;
+
    BaseSettings::BaseSettings()
    {
       using Log = cjm::io::Log;
@@ -57,7 +59,7 @@ namespace cjm::data
       }
       else
       {
-         logger_->warn("Node not found.", nodeName, index);
+         logger_->warn("Node not found.", Log::pack("node name", nodeName), Log::pack("index", index));
          return default_value;
       }
    }
@@ -87,7 +89,10 @@ namespace cjm::data
       }
       else
       {
-         logger_->warn("Trying to add a node to a non-existent node.", nodeName, value);
+         logger_->warn(
+            "Trying to add a node to a non-existent node.",
+            Log::pack("node name", nodeName),
+            Log::pack("value", value));
       }
    }
 
@@ -107,7 +112,8 @@ namespace cjm::data
       }
       else
       {
-         logger_->warn("Trying to retrieve an attribute from a non-existent node.", attributeName);
+         logger_->warn(
+            "Trying to retrieve an attribute from a non-existent node.", Log::pack("attribute name", attributeName));
          return default_value;
       }
    }
@@ -121,7 +127,7 @@ namespace cjm::data
 
          if (index < 0 && index != last_node_idx)
          {
-            logger_->warn("Passed invalid index to enterNode.", index);
+            logger_->warn("Passed invalid index to enterNode.", Log::pack("index", index));
             return BaseSettings(nullptr);
          }
 
@@ -140,7 +146,10 @@ namespace cjm::data
       }
       else
       {
-         logger_->warn("Trying to enter a child of a non-existent node.", nodeName, index);
+         logger_->warn(
+            "Trying to enter a child of a non-existent node.",
+            Log::pack("node name", nodeName),
+            Log::pack("index", index));
          return BaseSettings(nullptr);
       }
    }
@@ -161,7 +170,10 @@ namespace cjm::data
       }
       else
       {
-         logger_->warn("Trying to add an attribute to a non-existent node.", attributeName, value);
+         logger_->warn(
+            "Trying to add an attribute to a non-existent node.",
+            Log::pack("attribute name", attributeName),
+            Log::pack("value", value));
       }
    }
 
@@ -173,7 +185,7 @@ namespace cjm::data
       }
       else
       {
-         logger_->warn("Trying to set the value of a non-existent node.", value);
+         logger_->warn("Trying to set the value of a non-existent node.", Log::pack("value", value));
       }
    }
 
@@ -202,13 +214,13 @@ namespace cjm::data
          auto nodeVec = currentNode_->children.find(nodeName);
          if (nodeVec == currentNode_->children.end())
          {
-            logger_->error("Node does not exist.", nodeName, index);
+            logger_->error("Node does not exist.", Log::pack("node name", nodeName), Log::pack("index", index));
             return;
          }
 
          if (index < 0 && index != last_node_idx)
          {
-            logger_->error("Passed invalid index to enterNode.", index);
+            logger_->error("Passed invalid index to enterNode.", Log::pack("index", index));
             return;
          }
 
@@ -222,7 +234,10 @@ namespace cjm::data
             uIndex = static_cast<size_t>(index);
             if (nodeVec->second.size() <= uIndex)
             {
-               logger_->error("Not enough nodes: index too high.", uIndex, nodeVec->second.size());
+               logger_->error(
+                  "Not enough nodes: index too high.",
+                  Log::pack("index", uIndex),
+                  Log::pack("number of nodes", nodeVec->second.size()));
                return;
             }
          }
@@ -231,7 +246,10 @@ namespace cjm::data
       }
       else
       {
-         logger_->error("Trying to enter a child of a non-existent node.", nodeName, index);
+         logger_->error(
+            "Trying to enter a child of a non-existent node.",
+            Log::pack("node name", nodeName),
+            Log::pack("index", index));
          return;
       }
    }

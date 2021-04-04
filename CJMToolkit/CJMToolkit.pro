@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     common/data/BaseSettings.cpp \
+    common/data/LogMsg.cpp \
     common/data/Version.cpp \
     common/io/Log.cpp \
     common/qt/ButtonSelector.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     MainWindow.hpp \
     common/data/BaseSettings.hpp \
     common/data/CircularQueue.hpp \
+    common/data/LogMsg.hpp \
     common/data/Version.hpp \
     common/io/Log.hpp \
     common/qt/ButtonSelector.hpp \

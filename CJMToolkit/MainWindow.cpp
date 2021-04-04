@@ -26,6 +26,8 @@
 
 #include <QFile>
 
+using cjm::io::Log;
+
 MainWindow::MainWindow(cjm::data::BaseSettings& settings, QWidget* parent) :
    QMainWindow{ parent }, settings_{ settings }
 {
@@ -202,11 +204,15 @@ bool MainWindow::loadSizes_()
          {
             int minimumWidth{ std::atoi(value.data()) };
             setMinimumWidth(minimumWidth);
-            logger_->info("Minimum window width set.", minimumWidth);
+            logger_->info("Minimum window width set.", Log::pack("minimum width", minimumWidth));
          }
          else
          {
-            logger_->warn("No minimum width specified for the main window.", Size::node, Size::minimum, Size::width);
+            logger_->warn(
+               "No minimum width specified for the main window.",
+               Log::pack("previous node", Size::node),
+               Log::pack("current node", Size::minimum),
+               Log::pack("missing node", Size::width));
          }
 
          value = minimumSizeSettings(Size::height);
@@ -214,21 +220,28 @@ bool MainWindow::loadSizes_()
          {
             int minimumHeight{ std::atoi(value.data()) };
             setMinimumHeight(minimumHeight);
-            logger_->info("Mimimum window height set.", minimumHeight);
+            logger_->info("Mimimum window height set.", Log::pack("minimum height", minimumHeight));
          }
          else
          {
-            logger_->warn("No minimum height specified for the main window.", Size::node, Size::minimum, Size::height);
+            logger_->warn(
+               "No minimum height specified for the main window.",
+               Log::pack("previous node", Size::node),
+               Log::pack("current node", Size::minimum),
+               Log::pack("missing node", Size::height));
          }
       }
       else
       {
-         logger_->warn("No minimum size section specified.", Size::node, Size::minimum);
+         logger_->warn(
+            "No minimum size section specified.",
+            Log::pack("current node", Size::node),
+            Log::pack("missing node", Size::minimum));
       }
    }
    else
    {
-      logger_->warn("No size section specified.", Size::node);
+      logger_->warn("No size section specified.", Log::pack("missing node", Size::node));
    }
 
    return true;
@@ -251,17 +264,17 @@ bool MainWindow::loadStyleSheets_()
             QFile stylesheetFile{ fileName.data() };
             stylesheetFile.open(QFile::OpenModeFlag::ReadOnly);
             setStyleSheet(stylesheetFile.readAll());
-            logger_->info("Style-sheet set.", fileName);
+            logger_->info("Style-sheet set.", Log::pack("file name", fileName));
          }
          else
          {
-            logger_->warn("Non-existent stylesheet file.", fileName);
+            logger_->warn("Non-existent stylesheet file.", Log::pack("file name", fileName));
          }
       }
    }
    else
    {
-      logger_->warn("No style-sheet section specified.", StyleSheet::name);
+      logger_->warn("No style-sheet section specified.", Log::pack("missing node", StyleSheet::name));
    }
 
    return true;

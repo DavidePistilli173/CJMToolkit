@@ -46,11 +46,14 @@ namespace cjm::data
       /**
        * @brief Push an element into the queue.
        * @param newElement New element tu push into the queue.
+       * @return Reference to the newly inserted element.
        */
-      constexpr void push(const Type& newElement)
+      constexpr Type& push(const Type& newElement)
       {
          // Push a new element into the queue.
          data_[pushIdx_] = newElement;
+         Type& returnValue = data_[pushIdx_];
+
          ++pushIdx_;
          ++currentSize_;
 
@@ -63,6 +66,8 @@ namespace cjm::data
             --currentSize_;
             pop();
          }
+
+         return returnValue;
       }
 
       /**

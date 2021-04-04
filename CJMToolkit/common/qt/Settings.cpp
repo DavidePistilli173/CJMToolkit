@@ -26,12 +26,14 @@
 
 namespace cjm::qt
 {
+   using cjm::io::Log;
+
    Settings::Settings(std::string_view fileName, Format fileFormat) : format_{ fileFormat }, fileName_{ fileName }
    {
       file_.setFileName(fileName_.data());
       if (!file_.open(open_mode))
       {
-         logger_->error("Failed to open the settings file.", fileName_);
+         logger_->error("Failed to open the settings file.", Log::pack("file name", fileName_));
          status_ = Status::file_error;
       }
       else
@@ -62,7 +64,9 @@ namespace cjm::qt
       if (reader.hasError())
       {
          logger_->error(
-            "Error while reading the xml settings file.", fileName_, reader.errorString().toUtf8().constData());
+            "Error while reading the xml settings file.",
+            Log::pack("file name", fileName_),
+            Log::pack("error message", reader.errorString().toUtf8().constData()));
          status_ = Status::file_error;
          return;
       }
@@ -78,7 +82,9 @@ namespace cjm::qt
          {
          case QXmlStreamReader::TokenType::Invalid:
             logger_->error(
-               "Invalid token in the xml settings file.", fileName_, reader.errorString().toUtf8().constData());
+               "Invalid token in the xml settings file.",
+               Log::pack("file name", fileName_),
+               Log::pack("error message", reader.errorString().toUtf8().constData()));
             status_ = Status::format_error;
             break;
          case QXmlStreamReader::TokenType::NoToken:
@@ -108,7 +114,9 @@ namespace cjm::qt
       if (reader.hasError())
       {
          logger_->error(
-            "Error while reading the xml settings file.", fileName_, reader.errorString().toUtf8().constData());
+            "Error while reading the xml settings file.",
+            Log::pack("file name", fileName_),
+            Log::pack("error message", reader.errorString().toUtf8().constData()));
          status_ = Status::format_error;
       }
    }

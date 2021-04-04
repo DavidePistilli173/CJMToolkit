@@ -1,10 +1,5 @@
-[INF] - [11ms]Settings file loaded successfully.
-   ./config/settings.xml
-[INF] - [11ms]Minimum window width set.
-   1280
-[INF] - [11ms]Mimimum window height set.
-   720
-[INF] - [12ms]Style-sheet set.
-   ./config/stylesheets/base.qss
-[WRN] - [12ms]Node not found.
-   file   1
+[INF - 11ms] - Settings file loaded successfully.
+[INF - 11ms] - Minimum window width set.
+[INF - 11ms] - Mimimum window height set.
+[INF - 12ms] - Style-sheet set.
+[WRN - 12ms] - Node not found.
