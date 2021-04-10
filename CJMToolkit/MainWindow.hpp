@@ -102,8 +102,9 @@ public:
    struct PagePanel
    {
       /********** CONSTANTS **********/
-      static constexpr int margin{ 5 };  /**< Content margin. */
-      static constexpr int spacing{ 5 }; /**< Spacing. */
+      static constexpr int margin_horizontal{ 0 }; /**< Horizontal content margin. */
+      static constexpr int margin_vertical{ 0 };   /**< Vertical content margin. */
+      static constexpr int spacing{ 5 };           /**< Spacing. */
 
       /********** UI OBJECTS **********/
       QStackedLayout* layout;               /**< Layout of the panel. */
@@ -128,10 +129,10 @@ public:
       /**
        * @brief Stretches of the elements of the panel.
        */
-      static constexpr std::array<int, static_cast<size_t>(Order::page) + 1> stretches{ 1, 10 };
+      static constexpr std::array<int, static_cast<size_t>(Order::page) + 1> stretches{ 1, 20 };
 
-      static constexpr int margin{ 5 };  /**< Content margin. */
-      static constexpr int spacing{ 5 }; /**< Spacing between elements. */
+      static constexpr int margin{ 2 };  /**< Content margin. */
+      static constexpr int spacing{ 2 }; /**< Spacing between elements. */
 
       /********** UI OBJECTS **********/
       QWidget*          mainWidget{ nullptr }; /**< Central widget of the application. */
@@ -207,6 +208,12 @@ private:
    /********** VARIABLES **********/
    cjm::io::Log*            logger_{ nullptr }; /**< Message logger. */
    cjm::data::BaseSettings& settings_;          /**< Application settings. */
-   MainPanel                mainPanel_;         /**< Main panel of the window. */
+
+   /**
+    * @brief Version of the application.
+    */
+   cjm::data::Version appVersion_{ app_version_majour, app_version_minor, app_version_build };
+
+   MainPanel mainPanel_; /**< Main panel of the window. */
 };
 #endif // MAINWINDOW_HPP

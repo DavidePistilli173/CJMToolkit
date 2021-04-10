@@ -25,10 +25,12 @@
 #ifndef DEBUGPANEL_HPP
 #define DEBUGPANEL_HPP
 
+#include "DebugInfoPanel.hpp"
 #include "common/io/Log.hpp"
 #include "common/qt/ButtonSelector.hpp"
 #include "common/qt/StateButton.hpp"
 
+#include <QStackedLayout>
 #include <QWidget>
 
 /**
@@ -65,6 +67,20 @@ public:
    };
 
    /**
+    * @brief Panel containing the actual page.
+    */
+   struct PagePanel
+   {
+      /********** CONSTANTS **********/
+      static constexpr int margin_horizontal{ 0 }; /**< Horizontal content margin. */
+      static constexpr int margin_vertical{ 5 };   /**< Vertical content margin. */
+
+      /********** UI OBJECTS **********/
+      QStackedLayout* layout{ nullptr };   /**< Layout of the panel. */
+      DebugInfoPanel* infoPage{ nullptr }; /**< INFO page. */
+   };
+
+   /**
     * @brief Main panel of the widget.
     */
    struct MainPanel
@@ -74,16 +90,20 @@ public:
        */
       enum class Order
       {
-         page_selector
+         page_selector,
+         page
       };
 
       /********** CONSTANTS ********/
-      static constexpr int margin{ 5 };  /**< Content margins. */
-      static constexpr int spacing{ 5 }; /**< Spacing between the elements. */
+      static constexpr int margin{ 0 };           /**< Content margins. */
+      static constexpr int spacing{ 5 };          /**< Spacing between the elements. */
+      static constexpr int selector_stretch{ 1 }; /**< Stretch of the page selector. */
+      static constexpr int page_stretch{ 20 };    /**< Stretch of the page. */
 
       /********** UI OBJECTS ********/
       QVBoxLayout*      layout{ nullptr }; /**< Layout of the panel. */
       PageSelectorPanel pageSelectorPanel; /**< Page selector panel. */
+      PagePanel         pagePanel;         /**< Panel containing all pages. */
    };
 
    /**
@@ -100,6 +120,12 @@ public:
 
 private:
    /********** METHODS **********/
+   /**
+    * @brief Initialise the pages of the panel.
+    * @return true on success, false otherwise.
+    */
+   bool initPages_();
+
    /**
     * @brief Initialise the page selector panel.
     * @param panel Panel to initialise.

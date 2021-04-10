@@ -11,7 +11,7 @@ QPushButton
    background-color: rgba(0, 0, 0, 0);
    border-width: 2px;
    border-style: solid;
-   font-size: 15px
+   font-size: 12px
 }
 
 QPushButton:hover
@@ -23,5 +23,5 @@ QPushButton:pressed
 {
     background-color: rgba(130, 130, 195, 75);
     border-width: 1px;
-    font-size: 14px
+    font-size: 11px
 }

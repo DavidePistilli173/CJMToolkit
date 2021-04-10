@@ -3,13 +3,8 @@
 
 #include "common/data/Version.hpp"
 
-constexpr unsigned int version_majour{ 0U }; /**< Majour version of the CJMToolkit application. */
-constexpr unsigned int version_minor{ 5U };  /**< Minor version of the CJMToolkit application. */
-constexpr unsigned int version_build{ 2U };  /**< Build version of the CJMToolkit application. */
-
-/**
- * @brief Version of the CJMToolkit application.
- */
-const cjm::data::Version version{ version_majour, version_minor, version_build };
+constexpr unsigned int app_version_majour{ 0U }; /**< Majour version of the CJMToolkit application. */
+constexpr unsigned int app_version_minor{ 6U };  /**< Minor version of the CJMToolkit application. */
+constexpr unsigned int app_version_build{ 0U };  /**< Build version of the CJMToolkit application. */
 
 #endif // VERSION_INFO_HPP

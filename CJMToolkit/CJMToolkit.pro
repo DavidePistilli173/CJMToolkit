@@ -14,10 +14,12 @@ SOURCES += \
     common/data/Version.cpp \
     common/io/Log.cpp \
     common/qt/ButtonSelector.cpp \
+    common/qt/InfoDisplay.cpp \
     common/qt/Settings.cpp \
     common/qt/StateButton.cpp \
     main.cpp \
     MainWindow.cpp \
+    panels/DebugInfoPanel.cpp \
     panels/DebugPanel.cpp
 
 HEADERS += \
@@ -28,9 +30,11 @@ HEADERS += \
     common/data/Version.hpp \
     common/io/Log.hpp \
     common/qt/ButtonSelector.hpp \
+    common/qt/InfoDisplay.hpp \
     common/qt/Settings.hpp \
     common/qt/StateButton.hpp \
     common/version_info.hpp \
+    panels/DebugInfoPanel.hpp \
     panels/DebugPanel.hpp \
     version_info.hpp
 

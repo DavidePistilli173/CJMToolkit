@@ -38,6 +38,36 @@ bool DebugPanel::init()
    return true;
 }
 
+bool DebugPanel::initPages_()
+{
+   using Panel = PagePanel;
+   PagePanel& panel{ mainPanel_.pagePanel };
+
+   panel.infoPage = new DebugInfoPanel(this);
+   if (panel.infoPage == nullptr)
+   {
+      logger_->error("Memory allocation failed.");
+      return false;
+   }
+   if (!panel.infoPage->init())
+   {
+      logger_->error("Failed to initialise the information page.");
+      return false;
+   }
+
+   panel.layout = new QStackedLayout();
+   if (panel.layout == nullptr)
+   {
+      logger_->error("Memory allocation failed.");
+      return false;
+   }
+
+   panel.layout->addWidget(panel.infoPage);
+   panel.layout->setCurrentWidget(panel.infoPage);
+
+   return true;
+}
+
 bool DebugPanel::initPageSelector_(PageSelectorPanel& panel)
 {
    using Panel = PageSelectorPanel;
@@ -62,6 +92,12 @@ bool DebugPanel::initUI_()
       return false;
    }
 
+   if (!initPages_())
+   {
+      logger_->error("Failed to initialise the pages.");
+      return false;
+   }
+
    mainPanel_.layout = new QVBoxLayout();
    if (mainPanel_.layout == nullptr)
    {
@@ -74,7 +110,11 @@ bool DebugPanel::initUI_()
    setLayout(mainPanel_.layout);
 
    mainPanel_.layout->insertWidget(
-      static_cast<int>(Panel::Order::page_selector), mainPanel_.pageSelectorPanel.pageSelector);
+      static_cast<int>(Panel::Order::page_selector),
+      mainPanel_.pageSelectorPanel.pageSelector,
+      Panel::selector_stretch);
+   mainPanel_.layout->insertLayout(
+      static_cast<int>(Panel::Order::page), mainPanel_.pagePanel.layout, Panel::page_stretch);
 
    return true;
 }

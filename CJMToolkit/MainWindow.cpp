@@ -86,7 +86,8 @@ bool MainWindow::initPages_(PagePanel& panel)
       return false;
    }
 
-   panel.layout->setContentsMargins(Panel::margin, Panel::margin, Panel::margin, Panel::margin);
+   panel.layout->setContentsMargins(
+      Panel::margin_horizontal, Panel::margin_vertical, Panel::margin_horizontal, Panel::margin_vertical);
    panel.layout->setSpacing(Panel::spacing);
 
    panel.layout->insertWidget(static_cast<int>(PageSelectorPanel::Order::debug), panel.debugPage);
@@ -166,7 +167,7 @@ bool MainWindow::initUI_()
 bool MainWindow::initWindow_()
 {
    // Set the title bar.
-   setWindowTitle(QString(application_name.data()) + " " + version.getString().data());
+   setWindowTitle(QString(application_name.data()) + " " + appVersion_.getString().data());
 
    return true;
 }
