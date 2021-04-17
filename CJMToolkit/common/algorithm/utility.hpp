@@ -111,7 +111,7 @@ namespace cjm::alg
       std::tuple<ConstructorArgs&...>&& constructorArgs = std::tuple<>(),
       std::tuple<InitArgs&...>&&        initArgs = std::tuple<>())
    {
-      if (!constructObj<DstType, ConstructorArgs..., TrueType>(
+      if (!constructObj<DstType, TrueType, ConstructorArgs...>(
              logger, obj, std::forward<std::tuple<ConstructorArgs&...>>(constructorArgs)))
       {
          logger->error("Failed to create object.");
