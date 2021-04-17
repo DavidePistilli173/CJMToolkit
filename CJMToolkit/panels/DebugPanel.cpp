@@ -24,6 +24,8 @@
 
 #include "DebugPanel.hpp"
 
+#include "common/algorithm/utility.hpp"
+
 DebugPanel::DebugPanel(QWidget* parent) : QWidget(parent) {}
 
 bool DebugPanel::init()
@@ -40,25 +42,19 @@ bool DebugPanel::init()
 
 bool DebugPanel::initPages_()
 {
-   using Panel = PagePanel;
+   using cjm::alg::constructObj;
+   using cjm::alg::makeObj;
    PagePanel& panel{ mainPanel_.pagePanel };
 
-   panel.infoPage = new DebugInfoPanel(this);
-   if (panel.infoPage == nullptr)
+   if (!makeObj(logger_, panel.infoPage))
    {
-      logger_->error("Memory allocation failed.");
-      return false;
-   }
-   if (!panel.infoPage->init())
-   {
-      logger_->error("Failed to initialise the information page.");
+      logger_->error("Failed ot create the DEBUG::INFO page.");
       return false;
    }
 
-   panel.layout = new QStackedLayout();
-   if (panel.layout == nullptr)
+   if (!constructObj(logger_, panel.layout))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the page layout.");
       return false;
    }
 
@@ -70,12 +66,12 @@ bool DebugPanel::initPages_()
 
 bool DebugPanel::initPageSelector_(PageSelectorPanel& panel)
 {
+   using cjm::alg::makeObj;
    using Panel = PageSelectorPanel;
 
-   panel.pageSelector = new cjm::qt::ButtonSelector(Panel::buttons);
-   if (panel.pageSelector == nullptr)
+   if (!makeObj(logger_, panel.pageSelector, std::tuple<>(), std::tie(Panel::buttons)))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the page selector.");
       return false;
    }
 
@@ -84,6 +80,7 @@ bool DebugPanel::initPageSelector_(PageSelectorPanel& panel)
 
 bool DebugPanel::initUI_()
 {
+   using cjm::alg::constructObj;
    using Panel = MainPanel;
 
    if (!initPageSelector_(mainPanel_.pageSelectorPanel))
@@ -98,10 +95,9 @@ bool DebugPanel::initUI_()
       return false;
    }
 
-   mainPanel_.layout = new QVBoxLayout();
-   if (mainPanel_.layout == nullptr)
+   if (!constructObj(logger_, mainPanel_.layout))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the main layout.");
       return false;
    }
 

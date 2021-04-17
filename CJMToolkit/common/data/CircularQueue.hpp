@@ -22,8 +22,8 @@
    SOFTWARE.
 */
 
-#ifndef CIRCULARQUEUE_HPP
-#define CIRCULARQUEUE_HPP
+#ifndef COMMON_DATA_CIRCULARQUEUE_HPP
+#define COMMON_DATA_CIRCULARQUEUE_HPP
 
 #include <array>
 
@@ -91,4 +91,4 @@ namespace cjm::data
    };
 } // namespace cjm::data
 
-#endif // CIRCULARQUEUE_HPP
+#endif // COMMON_DATA_CIRCULARQUEUE_HPP

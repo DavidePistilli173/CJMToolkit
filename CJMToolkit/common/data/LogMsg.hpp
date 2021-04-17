@@ -22,8 +22,8 @@
    SOFTWARE.
 */
 
-#ifndef LOGMSG_HPP
-#define LOGMSG_HPP
+#ifndef COMMON_DATA_LOGMSG_HPP
+#define COMMON_DATA_LOGMSG_HPP
 
 #include <array>
 #include <sstream>
@@ -126,4 +126,4 @@ namespace cjm::data
    };
 } // namespace cjm::data
 
-#endif // LOGMSG_HPP
+#endif // COMMON_DATA_LOGMSG_HPP

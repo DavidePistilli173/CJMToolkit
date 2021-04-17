@@ -1,5 +1,6 @@
 #include "DebugInfoPanel.hpp"
 
+#include "common/algorithm/utility.hpp"
 #include "common/version_info.hpp"
 #include "version_info.hpp"
 
@@ -21,18 +22,14 @@ bool DebugInfoPanel::init()
 
 bool DebugInfoPanel::initLeftPanel_()
 {
+   using cjm::alg::constructObj;
+   using cjm::alg::makeObj;
    using Panel = LeftPanel;
    LeftPanel& panel{ mainPanel_.leftPanel };
 
-   panel.infoDisplay = new cjm::qt::InfoDisplay();
-   if (panel.infoDisplay == nullptr)
+   if (!makeObj(logger_, panel.infoDisplay))
    {
-      logger_->error("Memory allocation failed.");
-      return false;
-   }
-   if (!panel.infoDisplay->init())
-   {
-      logger_->error("Failed to initialise the information display panel.");
+      logger_->error("Failed to create the information display panel.");
       return false;
    }
 
@@ -41,30 +38,27 @@ bool DebugInfoPanel::initLeftPanel_()
    panel.infoDisplay->insertLabel(
       Panel::library_version, libVersion.getString(), static_cast<int>(Panel::Info::lib_version));
 
-   panel.infoLayout = new QVBoxLayout();
-   if (panel.infoLayout == nullptr)
+   if (!constructObj(logger_, panel.infoLayout))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the information panel layout.");
       return false;
    }
-
    panel.infoLayout->setContentsMargins(Panel::margin, Panel::margin, Panel::margin, Panel::margin);
    panel.infoLayout->setSpacing(Panel::spacing);
    panel.infoLayout->addWidget(panel.infoDisplay);
 
-   panel.infoBox = new QGroupBox(Panel::info_display_title.data(), this);
-   if (panel.infoBox == nullptr)
+   const char* str{ Panel::info_display_title.data() };
+   if (!constructObj(logger_, panel.infoBox, std::tie(str)))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the information panel box.");
       return false;
    }
    panel.infoBox->setContentsMargins(0, 0, 0, 0);
    panel.infoBox->setLayout(panel.infoLayout);
 
-   panel.layout = new QVBoxLayout();
-   if (panel.layout == nullptr)
+   if (!constructObj(logger_, panel.layout))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the layout.");
       return false;
    }
 
@@ -83,6 +77,7 @@ bool DebugInfoPanel::initRightPanel_()
 
 bool DebugInfoPanel::initUI_()
 {
+   using cjm::alg::constructObj;
    using Panel = MainPanel;
 
    if (!initLeftPanel_())
@@ -97,10 +92,9 @@ bool DebugInfoPanel::initUI_()
       return false;
    }
 
-   mainPanel_.layout = new QHBoxLayout();
-   if (mainPanel_.layout == nullptr)
+   if (!constructObj(logger_, mainPanel_.layout))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the main layout.");
       return false;
    }
 

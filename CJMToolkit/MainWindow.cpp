@@ -24,6 +24,8 @@
 
 #include "MainWindow.hpp"
 
+#include "common/algorithm/utility.hpp"
+
 #include <QFile>
 
 using cjm::io::Log;
@@ -64,25 +66,19 @@ bool MainWindow::init()
 
 bool MainWindow::initPages_(PagePanel& panel)
 {
+   using cjm::alg::constructObj;
+   using cjm::alg::makeObj;
    using Panel = PagePanel;
 
-   panel.debugPage = new DebugPanel();
-   if (panel.debugPage == nullptr)
+   if (!makeObj(logger_, panel.debugPage))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the DEBUG page.");
       return false;
    }
 
-   if (!panel.debugPage->init())
+   if (!constructObj(logger_, panel.layout))
    {
-      logger_->error("Failed to initialise the DEBUG page.");
-      return false;
-   }
-
-   panel.layout = new QStackedLayout();
-   if (panel.layout == nullptr)
-   {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the page layout.");
       return false;
    }
 
@@ -98,12 +94,12 @@ bool MainWindow::initPages_(PagePanel& panel)
 
 bool MainWindow::initPageSelector_(PageSelectorPanel& pageSelectorPanel)
 {
+   using cjm::alg::makeObj;
    using Panel = PageSelectorPanel;
 
-   pageSelectorPanel.pageSelector_ = new cjm::qt::ButtonSelector(Panel::buttons);
-   if (pageSelectorPanel.pageSelector_ == nullptr)
+   if (!makeObj(logger_, pageSelectorPanel.pageSelector_, std::tuple<>(), std::tie(Panel::buttons)))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the page selector.");
       return false;
    }
 
@@ -112,6 +108,7 @@ bool MainWindow::initPageSelector_(PageSelectorPanel& pageSelectorPanel)
 
 bool MainWindow::initUI_()
 {
+   using cjm::alg::constructObj;
    using Panel = MainPanel;
 
    if (!initWindow_())
@@ -132,10 +129,9 @@ bool MainWindow::initUI_()
       return false;
    }
 
-   mainPanel_.mainLayout = new QVBoxLayout();
-   if (mainPanel_.mainLayout == nullptr)
+   if (!constructObj(logger_, mainPanel_.mainLayout))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the main layout.");
       return false;
    }
    mainPanel_.mainLayout->setContentsMargins(Panel::margin, Panel::margin, Panel::margin, Panel::margin);
@@ -150,10 +146,9 @@ bool MainWindow::initUI_()
       mainPanel_.pagePanel.layout,
       Panel::stretches[static_cast<int>(Panel::Order::page)]);
 
-   mainPanel_.mainWidget = new QWidget();
-   if (mainPanel_.mainWidget == nullptr)
+   if (!constructObj(logger_, mainPanel_.mainWidget))
    {
-      logger_->error("Memory allocation failed.");
+      logger_->error("Failed to create the main widget.");
       return false;
    }
 

@@ -22,10 +22,12 @@
    SOFTWARE.
 */
 
-#ifndef BUTTONSELECTOR_HPP
-#define BUTTONSELECTOR_HPP
+#ifndef COMMON_QT_BUTTONSELECTOR_HPP
+#define COMMON_QT_BUTTONSELECTOR_HPP
 
 #include "StateButton.hpp"
+#include "common/algorithm/utility.hpp"
+#include "common/io/Log.hpp"
 
 #include <QLayout>
 #include <QWidget>
@@ -76,18 +78,29 @@ namespace cjm::qt
       /********** CONSTRUCTORS **********/
       /**
        * @brief Constructor.
-       * @tparam DataList Type of the buttonData list.
-       * @param buttonData Data about all the buttons required by the selector.
        * @param layoutType Type of layout to use for the buttons.
        * @param parent Parent widget of the selector.
        */
+      ButtonSelector(LayoutType layoutType = LayoutType::horizontal, QWidget* parent = nullptr);
+
+      /**
+       * @brief Initialise the selector.
+       * @tparam DataList Type of the buttonData list.
+       * @param buttonData Data about all the buttons required by the selector.
+       */
       template<typename DataList>
-      ButtonSelector(
-         const DataList& buttonData, LayoutType layoutType = LayoutType::horizontal, QWidget* parent = nullptr) :
-         QWidget(parent)
+      bool init(const DataList& buttonData)
       {
-         mainPanel_.layoutType_ = layoutType;
-         initUI_(buttonData);
+         logger_ = cjm::io::Log::logger();
+         if (logger_ == nullptr) return false;
+
+         if (!initUI_(buttonData))
+         {
+            logger_->error("Failed to initialise the UI.");
+            return false;
+         }
+
+         return true;
       }
 
    private:
@@ -98,17 +111,26 @@ namespace cjm::qt
        * @param buttonData Data for the buttons to create.
        */
       template<typename DataList>
-      void initUI_(const DataList& buttonData)
+      bool initUI_(const DataList& buttonData)
       {
+         using cjm::alg::constructObj;
          using Panel = MainPanel;
 
          switch (mainPanel_.layoutType_)
          {
          case LayoutType::horizontal:
-            mainPanel_.mainLayout = new QHBoxLayout();
+            if (!constructObj<QLayout, QHBoxLayout>(logger_, mainPanel_.mainLayout))
+            {
+               logger_->error("Failed to create the layout.");
+               return false;
+            }
             break;
          case LayoutType::vertical:
-            mainPanel_.mainLayout = new QVBoxLayout();
+            if (!constructObj<QLayout, QVBoxLayout>(logger_, mainPanel_.mainLayout))
+            {
+               logger_->error("Failed to create the layout.");
+               return false;
+            }
             break;
          }
          mainPanel_.mainLayout->setContentsMargins(Panel::margin, Panel::margin, Panel::margin, Panel::margin);
@@ -117,15 +139,24 @@ namespace cjm::qt
 
          for (const auto& data : buttonData)
          {
-            auto newButton = mainPanel_.buttons_.emplace_back(new StateButton(data, this));
+            auto newButton = mainPanel_.buttons_.emplace_back(nullptr);
+            if (!constructObj(logger_, newButton, std::tie(data)))
+            {
+               logger_->error("Failed to create button.");
+               return false;
+            }
             newButton->setSizePolicy(Panel::btn_size_policy);
             mainPanel_.mainLayout->addWidget(newButton);
          }
+
+         return true;
       }
 
       /********** VARIABLES **********/
+      cjm::io::Log* logger_; /**< Message logger. */
+
       MainPanel mainPanel_; /**< Main panel of the widget. */
    };
 } // namespace cjm::qt
 
-#endif // BUTTONSELECTOR_HPP
+#endif // COMMON_QT_BUTTONSELECTOR_HPP

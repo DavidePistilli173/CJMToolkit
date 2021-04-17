@@ -22,8 +22,8 @@
    SOFTWARE.
 */
 
-#ifndef BASESETTINGS_H
-#define BASESETTINGS_H
+#ifndef COMMON_DATA_BASESETTINGS_H
+#define COMMON_DATA_BASESETTINGS_H
 
 #include "common/io/Log.hpp"
 
@@ -239,4 +239,4 @@ namespace cjm::data
    };
 } // namespace cjm::data
 
-#endif // BASESETTINGS_H
+#endif // COMMON_DATA_BASESETTINGS_H

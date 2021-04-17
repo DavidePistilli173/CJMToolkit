@@ -22,8 +22,8 @@
    SOFTWARE.
 */
 
-#ifndef LOG_HPP
-#define LOG_HPP
+#ifndef COMMON_IO_LOG_HPP
+#define COMMON_IO_LOG_HPP
 
 #include "common/data/CircularQueue.hpp"
 #include "common/data/LogMsg.hpp"
@@ -237,4 +237,4 @@ namespace cjm::io
    };
 } // namespace cjm::io
 
-#endif // LOG_HPP
+#endif // COMMON_IO_LOG_HPP

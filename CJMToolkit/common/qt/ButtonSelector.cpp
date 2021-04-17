@@ -26,4 +26,8 @@
 
 namespace cjm::qt
 {
+   ButtonSelector::ButtonSelector(LayoutType layoutType, QWidget* parent) : QWidget(parent)
+   {
+      mainPanel_.layoutType_ = layoutType;
+   }
 } // namespace cjm::qt

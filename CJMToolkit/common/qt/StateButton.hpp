@@ -22,8 +22,8 @@
    SOFTWARE.
 */
 
-#ifndef STATEBUTTON_HPP
-#define STATEBUTTON_HPP
+#ifndef COMMON_QT_STATEBUTTON_HPP
+#define COMMON_QT_STATEBUTTON_HPP
 
 #include <QPushButton>
 #include <QWidget>
@@ -84,4 +84,4 @@ namespace cjm::qt
    };
 } // namespace cjm::qt
 
-#endif // STATEBUTTON_HPP
+#endif // COMMON_QT_STATEBUTTON_HPP

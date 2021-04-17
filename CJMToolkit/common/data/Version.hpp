@@ -22,8 +22,8 @@
    SOFTWARE.
 */
 
-#ifndef VERSION_HPP
-#define VERSION_HPP
+#ifndef COMMON_DATA_VERSION_HPP
+#define COMMON_DATA_VERSION_HPP
 
 #include <string>
 
@@ -65,4 +65,4 @@ namespace cjm::data
    };
 } // namespace cjm::data
 
-#endif // VERSION_HPP
+#endif // COMMON_DATA_VERSION_HPP

@@ -1,5 +1,39 @@
-[INF - 11ms] - Settings file loaded successfully.
-[INF - 11ms] - Minimum window width set.
-[INF - 11ms] - Mimimum window height set.
-[INF - 12ms] - Style-sheet set.
-[WRN - 12ms] - Node not found.
+[TRC - 0ms] - Log level set.
+[INF - 10ms] - Settings file loaded successfully.
+[INF - 10ms] - Minimum window width set.
+[INF - 10ms] - Mimimum window height set.
+[INF - 11ms] - Style-sheet set.
+[WRN - 11ms] - Node not found.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Object initialised.
+[TRC - 11ms] - Object created and initialised.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Object initialised.
+[TRC - 11ms] - Object created and initialised.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Object initialised.
+[TRC - 11ms] - Object created and initialised.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 11ms] - Memory allocated.
+[TRC - 15ms] - Memory allocated.
+[TRC - 15ms] - Memory allocated.
+[TRC - 15ms] - Memory allocated.
+[TRC - 15ms] - Object initialised.
+[TRC - 15ms] - Object created and initialised.
+[TRC - 15ms] - Memory allocated.
+[TRC - 62ms] - Memory allocated.
+[TRC - 70ms] - Object initialised.
+[TRC - 70ms] - Object created and initialised.
+[TRC - 70ms] - Memory allocated.
+[TRC - 85ms] - Memory allocated.
+[TRC - 85ms] - Memory allocated.

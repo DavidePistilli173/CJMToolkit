@@ -24,6 +24,7 @@ SOURCES += \
 
 HEADERS += \
     MainWindow.hpp \
+    common/algorithm/utility.hpp \
     common/data/BaseSettings.hpp \
     common/data/CircularQueue.hpp \
     common/data/LogMsg.hpp \

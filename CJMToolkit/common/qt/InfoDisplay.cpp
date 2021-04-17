@@ -1,5 +1,7 @@
 #include "InfoDisplay.hpp"
 
+#include "common/algorithm/utility.hpp"
+
 namespace cjm::qt
 {
    using cjm::io::Log;
@@ -8,15 +10,15 @@ namespace cjm::qt
 
    bool InfoDisplay::init()
    {
+      using cjm::alg::constructObj;
       using Panel = MainPanel;
 
       logger_ = cjm::io::Log::logger();
       if (logger_ == nullptr) return false;
 
-      mainPanel_.layout = new QGridLayout();
-      if (mainPanel_.layout == nullptr)
+      if (!constructObj(logger_, mainPanel_.layout))
       {
-         logger_->error("Memory allocation failed");
+         logger_->error("Failed to create the layout.");
          return false;
       }
 
@@ -30,6 +32,8 @@ namespace cjm::qt
 
    void InfoDisplay::insertLabel(std::string_view title, std::string_view value, int row)
    {
+      using cjm::alg::constructObj;
+
       if (!initialised_)
       {
          logger_->error("InfoDisplay not initialised.");
@@ -48,12 +52,13 @@ namespace cjm::qt
 
          for (unsigned int i = currentSize; i < mainPanel_.infoLabels.size(); ++i)
          {
-            mainPanel_.infoLabels[i].first = new QLabel("", this);
-            mainPanel_.infoLabels[i].second = new QLabel("", this);
-            if (mainPanel_.infoLabels[i].first == nullptr || mainPanel_.infoLabels[i].second == nullptr)
+            if (!(constructObj(logger_, mainPanel_.infoLabels[i].first) &&
+                  constructObj(logger_, mainPanel_.infoLabels[i].second)))
             {
                logger_->error(
-                  "Memory allocation failed.", Log::pack("requested row", row), Log::pack("current number of rows", i));
+                  "Failed to create the labels.",
+                  Log::pack("requested row", row),
+                  Log::pack("current number of rows", i));
                mainPanel_.infoLabels.resize(i);
                return;
             }

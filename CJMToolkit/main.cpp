@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
       return -1;
    }
    Log* logger{ Log::logger() };
+   logger->setLevel(Log::LogMsg::Level::trace);
 
    QApplication a(argc, argv);
 

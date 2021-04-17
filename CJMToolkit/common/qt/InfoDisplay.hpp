@@ -1,5 +1,5 @@
-#ifndef INFODISPLAY_HPP
-#define INFODISPLAY_HPP
+#ifndef COMMON_QT_INFODISPLAY_HPP
+#define COMMON_QT_INFODISPLAY_HPP
 
 #include "common/io/Log.hpp"
 
@@ -68,4 +68,4 @@ namespace cjm::qt
    };
 } // namespace cjm::qt
 
-#endif // INFODISPLAY_HPP
+#endif // COMMON_QT_INFODISPLAY_HPP
